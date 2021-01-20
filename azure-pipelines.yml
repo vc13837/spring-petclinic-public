@@ -6,14 +6,15 @@
 trigger:
 - main
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: Code_analysis
+  displayName: Analyse the petclinic code
+  jobs:
+  - job: Analyse_Code
+    displayName: Put the code through SonarQube
+    steps:
+    - task: CmdLine@2
+      inputs:
+        script: |
+          pwd
+          ls
