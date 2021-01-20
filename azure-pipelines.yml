@@ -24,6 +24,7 @@ stages:
     #       mvn -X sonar:sonar \
     #         -Dsonar.host.url=$(sonarqube_server)\
     #         -Dsonar.login=$(sonarqube_token)
+    
     - task: SonarQubePrepare@4
       inputs:
         SonarQube: 'azuresonarqube'
@@ -34,6 +35,19 @@ stages:
           # sonar.exclusions=**/*.bin
           sonar.projectName=Petclinic example on SonarQube
           sonar.projectKey=petclinic-public
+    - task: Maven@3
+      displayName: 'Maven Package'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: true
+        sqMavenPluginVersionChoice: 'latest'
+    
     - task: SonarQubePublish@4
       inputs:
         pollingTimeoutSec: '300'
