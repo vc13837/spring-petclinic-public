@@ -13,6 +13,9 @@ stages:
   - job: Analyse_Code
     displayName: Put the code through SonarQube
     steps:
+    - task: SonarQubePrepare@4
+      inputs:
+        scannerMode: 'Other'
     - task: CmdLine@2
       inputs:
         script: |
