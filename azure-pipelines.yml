@@ -17,8 +17,6 @@ stages:
       inputs:
         SonarQube: 'azuresonarqube'
         scannerMode: 'Other'
-    - task: CmdLine@2
+    - task: SonarQubePublish@4
       inputs:
-        script: |
-          pwd
-          ls
+        pollingTimeoutSec: '300'
