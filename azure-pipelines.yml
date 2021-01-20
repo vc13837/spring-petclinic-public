@@ -15,6 +15,7 @@ stages:
     steps:
     - task: SonarQubePrepare@4
       inputs:
+        SonarQube: 'azuresonarqube'
         scannerMode: 'Other'
     - task: CmdLine@2
       inputs:
