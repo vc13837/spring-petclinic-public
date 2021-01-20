@@ -6,6 +6,9 @@
 trigger:
 - main
 
+variables:
+- group: example_variable_group
+
 stages:
 - stage: Code_analysis
   displayName: Analyse the petclinic code
