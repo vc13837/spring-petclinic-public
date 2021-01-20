@@ -19,7 +19,8 @@ stages:
     - task: CmdLine@2
       inputs:
         script: |
-          mvn sonar:sonar \
+          echo $(sonarqube_server)
+          mvn -X sonar:sonar \
             -Dsonar.host.url=$(sonarqube_server)\
             -Dsonar.login=$(sonarqube_token)
             
