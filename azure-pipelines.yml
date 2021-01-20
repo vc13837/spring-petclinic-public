@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- None
 
 stages:
 - stage: Code_analysis
@@ -13,36 +13,45 @@ stages:
   - job: Analyse_Code
     displayName: Put the code through SonarQube
     steps:
-    - task: SonarQubePrepare@4
+    - task: CmdLine@2
       inputs:
-        SonarQube: 'azuresonarqube'
-        scannerMode: 'Other'
+        script: |
+          mvn sonar:sonar \
+            -Dsonar.host.url=$(sonarqube_server)\
+            -Dsonar.login=$(sonarqube_token)
+            
+    # - task: SonarQubePrepare@4
+    #   inputs:
+    #     SonarQube: 'azuresonarqube'
+    #     scannerMode: 'Other'
+    # - task: SonarQubePublish@4
+    #   inputs:
+    #     pollingTimeoutSec: '300'
 
-- stage: Build_app
-  displayName: Build the petclinic code
-  jobs:
-  - job: Build_Code
-    displayName: Build Maven Project
-    steps:
-    - task: Maven@3
-      displayName: 'Maven Package'
-      inputs:
-        mavenPomFile: 'pom.xml'
-    - task: CopyFiles@2
-      displayName: 'Copy Files to artifact staging directory'
-      inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: '**/target/*.?(war|jar)'
-        TargetFolder: $(Build.ArtifactStagingDirectory)
-    - upload: $(Build.ArtifactStagingDirectory)
-      artifact: drop
 
-- stage: Analysis_publish
-  displayName: Publish the petclinic code analysis
-  jobs:
-  - job: Publish_analysis
-    displayName: Publish the code analysis result
-    steps:
-    - task: SonarQubePublish@4
-      inputs:
-        pollingTimeoutSec: '300'
+# - stage: Build_app
+#   displayName: Build the petclinic code
+#   jobs:
+#   - job: Build_Code
+#     displayName: Build Maven Project
+#     steps:
+#     - task: Maven@3
+#       displayName: 'Maven Package'
+#       inputs:
+#         mavenPomFile: 'pom.xml'
+#     - task: CopyFiles@2
+#       displayName: 'Copy Files to artifact staging directory'
+#       inputs:
+#         SourceFolder: '$(System.DefaultWorkingDirectory)'
+#         Contents: '**/target/*.?(war|jar)'
+#         TargetFolder: $(Build.ArtifactStagingDirectory)
+#     - upload: $(Build.ArtifactStagingDirectory)
+#       artifact: drop
+
+# - stage: Analysis_publish
+#   displayName: Publish the petclinic code analysis
+#   jobs:
+#   - job: Publish_analysis
+#     displayName: Publish the code analysis result
+#     steps:
+    
