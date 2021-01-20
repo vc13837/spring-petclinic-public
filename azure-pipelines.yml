@@ -35,6 +35,12 @@ stages:
           # sonar.exclusions=**/*.bin
           sonar.projectName=Petclinic example on SonarQube
           sonar.projectKey=petclinic-public:main
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $params = "$env:SONARQUBE_SCANNER_PARAMS" -replace '"sonar.branch.name":"[\w,/,-]*"\,?'
+              Write-Host "##vso[task.setvariable variable=SONARQUBE_SCANNER_PARAMS]$params"
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
