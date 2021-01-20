@@ -16,22 +16,27 @@ stages:
   - job: Analyse_Code
     displayName: Put the code through SonarQube
     steps:
-    - task: CmdLine@2
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: |
+    #       echo "Server: $(sonarqube_server)"
+    #       mvn clean package
+    #       mvn -X sonar:sonar \
+    #         -Dsonar.host.url=$(sonarqube_server)\
+    #         -Dsonar.login=$(sonarqube_token)
+    - task: SonarQubePrepare@4
       inputs:
-        script: |
-          echo "Server: $(sonarqube_server)"
-          mvn clean package
-          mvn -X sonar:sonar \
-            -Dsonar.host.url=$(sonarqube_server)\
-            -Dsonar.login=$(sonarqube_token)
-            
-    # - task: SonarQubePrepare@4
-    #   inputs:
-    #     SonarQube: 'azuresonarqube'
-    #     scannerMode: 'Other'
-    # - task: SonarQubePublish@4
-    #   inputs:
-    #     pollingTimeoutSec: '300'
+        SonarQube: 'azuresonarqube'
+        scannerMode: 'Other'
+        extraProperties: |
+          # Additional properties that will be passed to the scanner, 
+          # Put one key=value per line, example:
+          # sonar.exclusions=**/*.bin
+          sonar.projectName=Petclinic example on SonarQube
+          sonar.projectKey=petclinic-public
+    - task: SonarQubePublish@4
+      inputs:
+        pollingTimeoutSec: '300'
 
 
 # - stage: Build_app
