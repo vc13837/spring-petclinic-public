@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- None
+- main
 
 stages:
 - stage: Code_analysis
